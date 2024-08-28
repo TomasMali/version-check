@@ -1,0 +1,72 @@
+<!-- src/app/app.component.html -->
+<main>
+
+    <div class="container mt-5">
+ 
+
+      <div class="row">
+        <div class="col">
+          <h3 class="display-12 ">Gestione Versioni Fiscality</h3>
+        </div>
+      </div>
+    
+    
+       <!-- Combo box for remote versions -->
+       <div class="my-5">
+        <label for="remoteVersions" class="form-label">Select Remote Version: {{selectedRemoteVersion}}</label>
+        <select id="remoteVersions" class="form-select form-select-lg form-select-color" [(ngModel)]="selectedRemoteVersion" (ngModelChange)="onRemoteVersionChange($event)">
+          <option *ngFor="let release of releases" [ngValue]="release.version_number">{{ release.version_number }}</option>
+        </select>
+      </div>
+    
+      <!-- Table with checkboxes -->
+      <table class="table table-striped table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="selectAll" [ngModel]="allSelected" (ngModelChange)="toggleAllSelection()">
+                <label class="form-check-label" for="selectAll" [class.checked]="selectAllCheckboxState === 'checked'" [class.indeterminate]="selectAllCheckboxState === 'indeterminate'">All</label>
+              </div>
+            </th>
+            <th>PIVA</th>
+            <th>Licese</th>
+            <th>Remote Version</th>
+            <th>Current Version</th>
+            <th>Modules</th>
+            <th>OS</th>
+            <th>Timestamp Insertion</th>
+            <th>Timestamp Update</th>
+            <th>Logs</th>
+          </tr>
+        </thead>
+        <tbody class="table-group-divider">
+          <tr *ngFor="let item of data">
+            <td>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="{{ item.PIVA }}" [(ngModel)]="item.selected" (change)="updateSelectAllCheckboxState()">
+              </div>
+            </td>
+            <td>{{ item.piva }}</td>
+            <td>{{ item.licenza }}</td>
+            <td>{{ item.remoteversion }}</td>
+            <td>{{ item.currentversion }}</td>
+            <td>{{ item.modules }}</td>
+            <td>{{ item.os }}</td>
+            <td>{{ item.timestampinsertion | date: 'yyyy-MM-dd HH:mm:ss' }}</td>
+            <td>{{ item.timestampupdate | date: 'yyyy-MM-dd HH:mm:ss' }}</td>
+            <td><a class="btn btn-sm btn-link" [href]="'http://10.100.0.30:8083/logs/' + item.piva + '_' + item.licenza" target="_blank">Logs</a></td>
+          </tr>
+        </tbody>
+      </table>
+    
+      <button class="btn btn-primary mt-3" [disabled]="!isAnyCheckboxSelected()" (click)="saveSelectedVersions()" >Save</button>
+    
+      
+    
+    </div>
+
+    
+    </main>
+    
+    
