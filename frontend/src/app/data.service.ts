@@ -7,8 +7,8 @@ import { Release } from './release.model';
   providedIn: 'root'
 })
 export class DataService {
-  private apiUrl = 'http://10.100.0.30:3008';
-  //  private apiUrl = 'http://localhost:3010';
+  // private apiUrl = 'http://10.100.0.30:3008';
+   private apiUrl = 'http://localhost:3010/api';
 
 
   constructor(private http: HttpClient) {}
@@ -18,10 +18,8 @@ export class DataService {
   }
 
   updateRemoteVersions(selectedVersions: any[]): Observable<any> {
-    return this.http.put<any[]>(`${this.apiUrl}/updateRemoteVersions`, selectedVersions);
+    return this.http.put<any[]>(`${this.apiUrl}/versions/updateRemoteVersions`, selectedVersions);
   }
-
-  
 
 
   getReleases(): Observable<Release[]> {
