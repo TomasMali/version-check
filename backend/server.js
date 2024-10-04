@@ -8,6 +8,26 @@ const fs = require('fs');
 const path = require('path');
 const { format } = require('date-fns');
 
+
+
+require('dotenv').config();
+
+const pool = new Pool({
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT,
+});
+
+// Usefull for closing correctly the connections during application shutdown
+process.on('SIGTERM', () => {
+  pool.end(() => {
+    console.log('Database pool closed');
+    process.exit(0);
+  });
+});
+
 const app = express();
 const port = 3010;
 
@@ -16,15 +36,6 @@ app.use(cors({
   methods: '*',
   allowedHeaders: '*'
 }));
-
-const pool = new Pool({
-  user: 'tommal',
-  host: '10.100.0.30',
-  database: 'repo-fis',
-  password: 'tommal',
-  port: 5432,
-});
-
 app.use(express.json());
 
 
